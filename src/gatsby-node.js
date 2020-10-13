@@ -4,6 +4,7 @@ import * as steps from "~/steps/index"
 module.exports = runApisInSteps({
   onPreInit: [steps.setErrorMap],
 
+  pluginOptionsSchema: [steps.declarePluginOptionsSchema],
   createSchemaCustomization: [
     steps.setGatsbyApiToState,
     steps.ensurePluginRequirementsAreMet,
