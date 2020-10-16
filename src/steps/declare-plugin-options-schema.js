@@ -1,4 +1,31 @@
+const queryTypes = [
+  `UserToMediaItemConnection`,
+  `WpContentNodeToEditLockConnectionEdge`,
+  `WPPageInfo`,
+  /* TODO: finish this list */
+]
+
 export function declarePluginOptionsSchema({ Joi }) {
+  const type = Joi.object({
+    /* TODO: Finish this */
+    MediaItem: Joi.object({
+      lazyNodes: Joi.boolean().default(false),
+      localFile: Joi.object({
+        excludeByMimeTypes: Joi.array().items(Joi.string()),
+      }),
+      beforeChangeNode: Joi.function().arity(1),
+    }),
+  })
+
+  queryTypes.forEach((queryType) => {
+    type.append({
+      [queryType]: Joi.object({
+        exclude: Joi.boolean().default(true),
+        excludeFieldNames: Joi.array().items(Joi.string()),
+      }),
+    })
+  })
+
   return Joi.object({
     url: Joi.string(),
     verbose: Joi.boolean().default(true),
@@ -44,10 +71,6 @@ export function declarePluginOptionsSchema({ Joi }) {
       imageQuality: Joi.number().integer().default(90),
       createStaticFiles: Joi.boolean().default(true),
     }),
-    /*
-    type: Joi.object({
-
-    })
-    */
-  });
+    type,
+  })
 }
